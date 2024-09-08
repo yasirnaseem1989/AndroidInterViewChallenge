@@ -3,11 +3,13 @@ package com.yasir.compose.androidinterviewchallenge.ui.home
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.yasir.compose.androidinterviewchallenge.data.provider.ImageHelper
 import com.yasir.compose.androidinterviewchallenge.data.repository.ErrorType
 import com.yasir.compose.androidinterviewchallenge.data.repository.ErrorType.Unknown
 import com.yasir.compose.androidinterviewchallenge.data.repository.Result
 import com.yasir.compose.androidinterviewchallenge.domain.CompressImageUseCase
 import com.yasir.compose.androidinterviewchallenge.domain.GetUserInfoUseCase
+import com.yasir.compose.androidinterviewchallenge.domain.UpdateProfileUseCase
 import com.yasir.compose.androidinterviewchallenge.domain.model.UserInfo
 import com.yasir.compose.androidinterviewchallenge.persistence.sharedpreference.UserKeyValueStore
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,7 +21,9 @@ import java.io.File
 class HomeViewModel(
     private val getUserInfoUseCase: GetUserInfoUseCase,
     private val compressImageUseCase: CompressImageUseCase,
+    private val updateProfileUseCase: UpdateProfileUseCase,
     private val userKeyValueStore: UserKeyValueStore,
+    private val imageHelper: ImageHelper,
 ) : ViewModel() {
 
     private val _homeUiState = MutableStateFlow(HomeUiState())
@@ -57,6 +61,14 @@ class HomeViewModel(
                     }
                 }
             }
+        }
+    }
+
+    fun updateProfile(file: File?) {
+        viewModelScope.launch {
+            val base64Image = file?.let { imageHelper.encodeImageToBase64(it) }
+            val userId = _homeUiState.value.userInfo.id
+            updateProfileUseCase.invoke(userId, base64Image.orEmpty())
         }
     }
 

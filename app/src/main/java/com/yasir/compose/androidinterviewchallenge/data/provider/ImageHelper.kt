@@ -6,8 +6,10 @@ import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.media.ExifInterface
 import android.net.Uri
+import android.util.Base64
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.InputStream
 
@@ -61,5 +63,10 @@ class ImageHelper(
             e.printStackTrace()
             null
         }
+    }
+
+    fun encodeImageToBase64(file: File): String {
+        val bytes = FileInputStream(file).use { it.readBytes() }
+        return Base64.encodeToString(bytes, Base64.NO_WRAP)
     }
 }

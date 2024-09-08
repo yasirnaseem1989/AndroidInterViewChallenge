@@ -89,7 +89,7 @@ fun ScreenHome(
                                 file?.let { validFile ->
                                     capturedImageUri = validFile.toURI().toString()
                                     viewModel.handleImageCapture(validFile) { compressedImage ->
-                                        /*viewModel.updateProfile(compressedImage)*/
+                                        viewModel.updateProfile(compressedImage)
                                     }
                                 }
                             }
