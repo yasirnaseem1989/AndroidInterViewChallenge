@@ -1,6 +1,7 @@
 package com.yasir.compose.androidinterviewchallenge.di
 
 import com.yasir.compose.androidinterviewchallenge.data.mapper.LoginMapper
+import com.yasir.compose.androidinterviewchallenge.data.provider.FakeUserProvider
 import com.yasir.compose.androidinterviewchallenge.data.remote.auth.AuthDataSource
 import com.yasir.compose.androidinterviewchallenge.data.remote.auth.RemoteAuthDataSource
 import com.yasir.compose.androidinterviewchallenge.data.repository.AuthRepository
@@ -14,7 +15,7 @@ private const val REPOSITORY_AUTH = "REPOSITORY_AUTH"
 
 private const val DATA_SOURCE_AUTH_REMOTE = "DATA_SOURCE_AUTH_REMOTE"
 
-const val USECASE_AUTH_LOGIN = "USECASE_AUTH_LOGIN"
+private const val USECASE_AUTH_LOGIN = "USECASE_AUTH_LOGIN"
 
 val authModule = module {
 
@@ -23,8 +24,11 @@ val authModule = module {
             get(),
             get(),
             get(),
+            get()
         )
     }
+
+    factory { FakeUserProvider() }
 
     single(named(REPOSITORY_AUTH)) {
         AuthRepository(get(named(DATA_SOURCE_AUTH_REMOTE)))
@@ -32,9 +36,11 @@ val authModule = module {
 
     factory { LoginMapper() }
 
+
+
     factory(named(USECASE_AUTH_LOGIN)) {
-        LoginUseCase(get(named(REPOSITORY_AUTH)), get())
+        LoginUseCase(get(named(REPOSITORY_AUTH)))
     }
 
-    viewModel { LoginViewModel(get(named(USECASE_AUTH_LOGIN))) }
+    viewModel { LoginViewModel(get(named(USECASE_AUTH_LOGIN)), get()) }
 }

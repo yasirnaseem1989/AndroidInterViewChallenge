@@ -1,8 +1,8 @@
 package com.yasir.compose.androidinterviewchallenge.domain.model
 
-data class Login(
-    val userId: Int? = null,
+data class UserInfo(
+    val id: Int = -1,
     val email: String = "",
     val password: String = "",
-    val token: String = "",
+    val avatarUrl: String = ""
 )

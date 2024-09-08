@@ -2,16 +2,17 @@ package com.yasir.compose.androidinterviewchallenge.data.mapper
 
 import com.yasir.compose.androidinterviewchallenge.data.provider.FakeUserProvider.DummyUser
 import com.yasir.compose.androidinterviewchallenge.domain.model.Login
+import com.yasir.compose.androidinterviewchallenge.domain.model.UserInfo
 import com.yasir.compose.androidinterviewchallenge.utils.ext.orZero
 
-class LoginMapper {
+class UserInfoMapper {
 
-    fun mapToDomain(remoteLogin: DummyUser): Login {
-        return Login(
-            userId = remoteLogin.id.orZero(),
+    fun mapToDomain(remoteLogin: DummyUser): UserInfo {
+        return UserInfo(
+            id = remoteLogin.id.orZero(),
             email = remoteLogin.email.orEmpty(),
             password = remoteLogin.password.orEmpty(),
-            token = remoteLogin.accessToken.orEmpty(),
+            avatarUrl = remoteLogin.accessToken.orEmpty(),
         )
     }
 }

@@ -2,6 +2,7 @@ package com.yasir.compose.androidinterviewchallenge
 
 import android.app.Application
 import com.yasir.compose.androidinterviewchallenge.di.authModule
+import com.yasir.compose.androidinterviewchallenge.di.homeModule
 import com.yasir.compose.androidinterviewchallenge.di.networkModule
 import com.yasir.compose.androidinterviewchallenge.di.persistenceModule
 import org.koin.android.ext.koin.androidContext
@@ -17,7 +18,8 @@ class BaseApplication: Application() {
             val koinModules = listOf(
                 networkModule,
                 persistenceModule,
-                authModule
+                authModule,
+                homeModule,
             )
             modules(koinModules)
         }

@@ -61,17 +61,25 @@ dependencies {
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.lifecycle.runtime.compose)
     implementation(libs.activity.compose)
+    implementation(libs.androidx.core.splashscreen)
     implementation(libs.navigation.compose)
     implementation(platform(libs.compose.bom))
     implementation(libs.ui)
+    api(libs.coil.compose)
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)
     implementation(libs.material3)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.ui.test.junit4)
+    testImplementation(libs.mockk)
+    testImplementation(libs.mockk.android)
+    testImplementation(libs.coroutines.test)
+
+
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
 

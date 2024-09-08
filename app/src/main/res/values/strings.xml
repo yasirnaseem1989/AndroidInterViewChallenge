@@ -4,8 +4,9 @@
     <string name="login_message">Log in to Assessment</string>
     <string name="email">Email</string>
     <string name="button_label_login">Login</string>
+    <string name="enter_txt">Enter</string>
 
-
+    <string name="name_text">Name/ Nickname *</string>
     <string name="email_error">Please enter valid email address.</string>
     <string name="password">Password</string>
     <string name="password_strength">Password strength</string>

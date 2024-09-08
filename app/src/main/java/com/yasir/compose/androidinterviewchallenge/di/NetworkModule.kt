@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder
 import com.yasir.compose.androidinterviewchallenge.BuildConfig
 import com.yasir.compose.androidinterviewchallenge.data.remote.NetworkHandler
 import com.yasir.compose.androidinterviewchallenge.data.remote.auth.AuthApiService
+import com.yasir.compose.androidinterviewchallenge.data.remote.home.HomeApiService
 import com.yasir.compose.androidinterviewchallenge.data.remote.interceptors.TokenInterceptor
 import okhttp3.CertificatePinner
 import okhttp3.Interceptor
@@ -76,5 +77,9 @@ val networkModule = module {
 
     single {
         get<Retrofit>(named(CLIENT_RETROFIT)).create(AuthApiService::class.java)
+    }
+
+    single {
+        get<Retrofit>(named(CLIENT_RETROFIT)).create(HomeApiService::class.java)
     }
 }

@@ -29,12 +29,13 @@ import com.yasir.compose.androidinterviewchallenge.ui.components.EmailComponent
 import com.yasir.compose.androidinterviewchallenge.ui.components.PasswordComponent
 import com.yasir.compose.androidinterviewchallenge.ui.components.WelcomeTitle
 import com.yasir.compose.androidinterviewchallenge.utils.Utils
+import com.yasir.compose.androidinterviewchallenge.utils.ext.orZero
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun ScreenLogin(
     viewModel: LoginViewModel = koinViewModel(),
-    navController: NavHostController
+    onLoginSuccess: (Int) -> Unit
 ) {
     val context = LocalContext.current
     var email by remember {
@@ -140,5 +141,7 @@ fun ScreenLogin(
                 modifier = Modifier.align(Alignment.Center)
             )
         }
+
+        if (loginUiState.hasData()) onLoginSuccess.invoke(loginUiState.login.userId.orZero())
     }
 }
