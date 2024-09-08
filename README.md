@@ -2,13 +2,13 @@
 
 - What frameworks or supporting libraries did you use to make the task simpler and/or easier to
   accomplish?
-- I have used Clean Architecture with MVVM pattern, Used different libraries mention below
-# Jetpack Compose
--  A modern Android UI toolkit that simplifies building dynamic, reactive user interfaces.
-# Koin (Dependency Injection)
-# Retrofit (Networking)
-# ExifInterface (Image Orientation Handling)
-# Kotlin Coroutines (Asynchronous Programming)
+- I have used Clean Architecture with MVVM pattern, Used different libraries mention below 
+  * Jetpack Compose
+  A modern Android UI toolkit that simplifies building dynamic, reactive user interfaces.
+ * Koin (Dependency Injection)
+ * Retrofit (Networking)
+ * ExifInterface (Image Orientation Handling)
+ * Kotlin Coroutines (Asynchronous Programming)
 - How did you ensure that the display of the avatar image (from a remote URL) gave the best user
   experience?
 - I apply and SubcomposeAsyncImage properties to make sure the display of the avatar image will give good experience such, as i apply content scale and enable diskCachePolicy to prevent the load the image from network again and again.
