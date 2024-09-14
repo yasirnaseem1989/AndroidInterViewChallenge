@@ -48,8 +48,9 @@ fun AssessmentApp(startDestination: String) {
         composable("login") {
             ScreenLogin(
                 onLoginSuccess = {
+                    navController.popBackStack("login", true)
                     navController.navigate("home") {
-                        popUpTo("login") { inclusive = true }
+                        launchSingleTop = true
                     }
                 }
             )

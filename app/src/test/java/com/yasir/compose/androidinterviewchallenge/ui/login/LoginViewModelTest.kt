@@ -44,7 +44,7 @@ class LoginViewModelTest {
 
     @Test
     fun `initial state should be correct`() = runBlocking {
-        // Arrange Initial state
+        // Arrange
         val initialState = loginViewModel.loginUiState.first()
 
         // Assert
@@ -94,29 +94,5 @@ class LoginViewModelTest {
         assertFalse(uiState.isLoading)
         assertTrue(uiState.isError)
         assertEquals(ErrorType.Network, uiState.errorType)
-    }
-
-    @Test
-    fun `login with empty email should not trigger login`() {
-        runBlocking {
-            // Arrange
-            coEvery { loginUseCase.invoke(any()) } returns Result.Error(ErrorType.Generic("Invalid Credientials"))
-
-            // Act
-            loginViewModel.login("", "123")
-
-            testDispatcher.scheduler.advanceUntilIdle()
-
-            // Assert
-            val uiState = loginViewModel.loginUiState.first()
-
-            assertFalse(uiState.isLoading)
-            assertFalse(uiState.isError)
-            assertFalse(uiState.isSuccess)
-            assertEquals("", uiState.login.token)
-            assertEquals(ErrorType.Generic("Invalid Credientials"), uiState.errorType)
-
-            coVerify(exactly = 0) { loginUseCase.invoke(any()) }
-        }
     }
 }

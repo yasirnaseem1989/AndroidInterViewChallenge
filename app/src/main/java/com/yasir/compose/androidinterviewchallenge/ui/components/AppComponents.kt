@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -26,10 +27,12 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -131,8 +134,8 @@ fun ProfileImageComponent(
     imageHelper: ImageHelper,
 ) {
     var imageUri by rememberSaveable { mutableStateOf<Uri?>(null) }
-    var bitmap by rememberSaveable { mutableStateOf<Bitmap?>(null) }
-    var showDialog by rememberSaveable { mutableStateOf(false) }
+    var bitmap by remember { mutableStateOf<Bitmap?>(null) }
+    var showDialog by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
     val cameraPermissionGranted = remember { mutableStateOf(false) }
@@ -146,13 +149,19 @@ fun ProfileImageComponent(
         imageFile
     )
 
+    val updatedOnImageCaptured by rememberUpdatedState(onImageCaptured)
+
     val galleryLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
-        uri?.let {
-            imageUri = it
-            onImageCaptured(it)
-            bitmap = imageHelper.handleImageRotation(uri)
+        try {
+            uri?.let {
+                imageUri = it
+                updatedOnImageCaptured(it)
+                bitmap = imageHelper.handleImageRotation(it)
+            }
+        } catch (e: Exception) {
+            Log.e("ProfileImageComponent", "Error handling image from gallery: ${e.message}")
         }
     }
 
@@ -161,7 +170,8 @@ fun ProfileImageComponent(
     ) { success: Boolean ->
         if (success) {
             bitmap = imageHelper.handleImageRotation(imageFileUri)
-            onImageCaptured(imageFileUri)
+            imageUri = imageFileUri
+            updatedOnImageCaptured(imageFileUri)
         }
     }
 
@@ -170,7 +180,7 @@ fun ProfileImageComponent(
     ) { isGranted: Boolean ->
         cameraPermissionGranted.value = isGranted
         if (!isGranted) {
-            // Handle permission denial (show a message or disable camera feature)
+            Log.e("ProfileImageComponent", "Camera permission denied")
         }
     }
 
@@ -180,6 +190,12 @@ fun ProfileImageComponent(
             Manifest.permission.CAMERA
         )
         cameraPermissionGranted.value = permissionStatus == PackageManager.PERMISSION_GRANTED
+    }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            imageFile.delete()
+        }
     }
 
     if (showDialog) {
@@ -204,20 +220,18 @@ fun ProfileImageComponent(
                         }
                         showDialog = false
                     })
-            },
-
-            )
+            }
+        )
     }
 
     Column(
-        modifier = Modifier
-            .fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        if (bitmap != null) {
+        bitmap?.let {
             Image(
-                bitmap = requireNotNull(bitmap?.asImageBitmap()),
+                bitmap = it.asImageBitmap(),
                 contentDescription = null,
                 modifier = Modifier
                     .clip(CircleShape)
@@ -225,7 +239,7 @@ fun ProfileImageComponent(
                     .clickable { showDialog = true },
                 contentScale = ContentScale.Crop
             )
-        } else {
+        } ?: run {
             SubcomposeAsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(image)
@@ -252,4 +266,6 @@ fun ProfileImageComponent(
         }
     }
 }
+
+
 

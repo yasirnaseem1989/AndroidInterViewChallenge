@@ -11,7 +11,7 @@
  * Kotlin Coroutines (Asynchronous Programming)
 - How did you ensure that the display of the avatar image (from a remote URL) gave the best user
   experience?
-- I apply and SubcomposeAsyncImage properties to make sure the display of the avatar image will give good experience such, as i apply content scale and enable diskCachePolicy to prevent the load the image from network again and again.
+- I apply and SubcomposeAsyncImage properties to make sure the display of the avatar image will give good experience and handle state of image like, loading, success, error. such, as i apply content scale and enable diskCachePolicy to prevent the load the image from network again and again.
 - How did you set up the app so that it was automatically logged in for the user on subsequent
   uses?
 - I have used SharedPreference to store the accessToken of the user after successfully login and on the bases of the accessToken i identify if the user is already logged in or not.
