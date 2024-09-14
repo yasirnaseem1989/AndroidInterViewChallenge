@@ -19,6 +19,10 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        val keyAlias = project.findProperty("KEY_ALIAS")
+        buildConfigField("String","KEY_ALIAS", "$keyAlias")
+
     }
 
     buildTypes {
